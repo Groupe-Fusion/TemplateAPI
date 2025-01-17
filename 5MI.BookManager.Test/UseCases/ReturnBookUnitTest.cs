@@ -13,7 +13,7 @@ namespace _5MI.BookManager.Test.UseCases
         {
             var fixture = new Fixture();
             var book = fixture.Create<Book>();
-            book.IsBorrowed = false; 
+            book.IsBorrowed = true; 
 
             var bookrepositoryMoq = new Mock<IBookRepository>();
             bookrepositoryMoq
@@ -22,13 +22,17 @@ namespace _5MI.BookManager.Test.UseCases
 
             bookrepositoryMoq
                 .Setup(x => x.UpdateBookAsync(It.IsAny<Book>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(book);
+                .ReturnsAsync((Book b, CancellationToken ct) =>
+                {
+                    b.IsBorrowed = false; 
+                    return b;
+                });
 
             var returnBookUseCase = new ReturnBookUseCase(bookrepositoryMoq.Object);
             var returnedBook = await returnBookUseCase.ExecuteAsync(book.Id);
 
             Assert.Equal(book.Id, returnedBook.Id);
-            Assert.True(returnedBook.IsBorrowed);
+            Assert.False(returnedBook.IsBorrowed); 
         }
 
         [Fact]
@@ -36,7 +40,7 @@ namespace _5MI.BookManager.Test.UseCases
         {
             var fixture = new Fixture();
             var book = fixture.Create<Book>();
-            book.IsBorrowed = true; // Livre déjà emprunté
+            book.IsBorrowed = false; 
 
             var bookrepositoryMoq = new Mock<IBookRepository>();
             bookrepositoryMoq
@@ -50,6 +54,5 @@ namespace _5MI.BookManager.Test.UseCases
                 await returnBookUseCase.ExecuteAsync(book.Id);
             });
         }
-
     }
 }
