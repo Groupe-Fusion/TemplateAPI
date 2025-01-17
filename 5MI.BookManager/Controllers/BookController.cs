@@ -3,6 +3,7 @@ using _5MI.BookManager.Applicatif.Core;
 using _5MI.BookManager.Domain.Models;
 using _5MI.BookManager.DTO;
 using _5MI.BookManager.Mapper;
+using _5MI.BookManager.DTO.Requests;
 
 namespace _5MI.BookManager.Presentation.Controllers
 {
@@ -70,10 +71,11 @@ namespace _5MI.BookManager.Presentation.Controllers
         /// Ajouter un nouveau livre.
         /// </summary>
         [HttpPost("add")]
-        public async Task<IActionResult> AddBook([FromBody] Book newBook, CancellationToken ct)
+        public async Task<IActionResult> AddBook([FromBody] BookRequest bookRequest, CancellationToken ct)
         {
             try
             {
+                var newBook = BookMapper.ToBookEntity(bookRequest);
                 var book = await _addBookUseCase.ExecuteAsync(newBook, ct);
                 return CreatedAtAction(nameof(GetBookById), new { bookId = book.Id }, book);
             }
