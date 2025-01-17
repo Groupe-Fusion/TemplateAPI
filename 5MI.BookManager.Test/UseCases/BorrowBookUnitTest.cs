@@ -23,7 +23,7 @@ namespace _5MI.BookManager.Test.UseCases
 
             var borrowBookUseCase = new BorrowBookUseCase(bookRepositoryMock.Object);
 
-            var book = await borrowBookUseCase.ExecuteAsync(book.Id);
+            book = await borrowBookUseCase.ExecuteAsync(book.Id);
 
             Assert.False(book.IsBorrowed);
         }
