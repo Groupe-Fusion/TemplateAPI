@@ -18,7 +18,7 @@ namespace _5MI.BookManager.Test.UseCases
 
             var bookRepositoryMock = new Mock<IBookRepository>();
             bookRepositoryMock
-                .Setup(x => x.GetByIdAsync(book.Id, It.IsAny<CancellationToken>()))
+                .Setup(x => x.GetBookByIdAsync(book.Id, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(book);
 
             var borrowBookUseCase = new BorrowBookUseCase(bookRepositoryMock.Object);
@@ -39,7 +39,7 @@ namespace _5MI.BookManager.Test.UseCases
 
             var bookRepositoryMock = new Mock<IBookRepository>();
             bookRepositoryMock
-                .Setup(x => x.GetByIdAsync(book.Id, It.IsAny<CancellationToken>()))
+                .Setup(x => x.GetBookByIdAsync(book.Id, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(book);
 
             var borrowBookUseCase = new BorrowBookUseCase(bookRepositoryMock.Object);
