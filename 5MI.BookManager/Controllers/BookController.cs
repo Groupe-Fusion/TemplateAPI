@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using _5MI.BookManager.Applicatif.Core;
 using _5MI.BookManager.Domain.Models;
+using _5MI.BookManager.DTO;
+using _5MI.BookManager.Mapper;
 
 namespace _5MI.BookManager.Presentation.Controllers
 {
@@ -37,7 +39,8 @@ namespace _5MI.BookManager.Presentation.Controllers
             try
             {
                 var book = await _borrowBookUseCase.ExecuteAsync(bookId, ct);
-                return Ok(book);
+                var bookResponse = BookMapper.ToBookResponse(book);
+                return Ok(bookResponse);
             }
             catch (KeyNotFoundException)
             {
@@ -54,7 +57,8 @@ namespace _5MI.BookManager.Presentation.Controllers
             try
             {
                 var book = await _returnBookUseCase.ExecuteAsync(bookId, ct);
-                return Ok(book);
+                var bookResponse = BookMapper.ToBookResponse(book);
+                return Ok(bookResponse);
             }
             catch (KeyNotFoundException)
             {
@@ -88,7 +92,8 @@ namespace _5MI.BookManager.Presentation.Controllers
             try
             {
                 var books = await _getAllBooksUseCase.ExecuteAsync(ct);
-                return Ok(books);
+                var bookResponses = books.Select(BookMapper.ToBookResponse).ToList();
+                return Ok(bookResponses);
             }
             catch (Exception ex)
             {
@@ -105,7 +110,8 @@ namespace _5MI.BookManager.Presentation.Controllers
             try
             {
                 var book = await _getBookByIdUseCase.ExecuteAsync(bookId, ct);
-                return Ok(book);
+                var bookResponse = BookMapper.ToBookResponse(book);
+                return Ok(bookResponse);
             }
             catch (KeyNotFoundException)
             {
