@@ -15,6 +15,9 @@ namespace _5MI.BookManager.Applicatif.UseCases
 
         public async Task<Book> ExecuteAsync(Book newBook, CancellationToken ct = default)
         {
+            if (string.IsNullOrEmpty(newBook.Title))
+                throw new ArgumentException("Entrer un titre valide");
+
             await _bookRepository.AddBookAsync(newBook, ct);
             return newBook;
         }

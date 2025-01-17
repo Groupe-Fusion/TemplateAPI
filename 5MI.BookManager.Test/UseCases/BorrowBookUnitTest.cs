@@ -13,19 +13,23 @@ namespace _5MI.BookManager.Test.UseCases
         {
             var fixture = new Fixture();
             var book = fixture.Build<Book>()
-                              .With(b => b.IsBorrowed, true)
+                              .With(b => b.IsBorrowed, false)
                               .Create();
 
             var bookRepositoryMock = new Mock<IBookRepository>();
             bookRepositoryMock
-                .Setup(x => x.GetBookByIdAsync(book.Id, It.IsAny<CancellationToken>()))
+                .Setup(x => x.GetBookByIdAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(book);
+
+            bookRepositoryMock
+                .Setup(x => x.UpdateBookAsync(It.IsAny<Book>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(book);
 
             var borrowBookUseCase = new BorrowBookUseCase(bookRepositoryMock.Object);
 
             book = await borrowBookUseCase.ExecuteAsync(book.Id);
 
-            Assert.False(book.IsBorrowed);
+            Assert.True(book.IsBorrowed);
         }
 
 

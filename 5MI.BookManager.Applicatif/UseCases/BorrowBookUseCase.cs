@@ -20,7 +20,6 @@ namespace _5MI.BookManager.Applicatif.UseCases
                 throw new InvalidOperationException("Le livre n'est pas disponible pour l'emprunt.");
 
             book.IsBorrowed = true;
-
             return await _bookRepository.UpdateBookAsync(book, ct); ;
         }
     }

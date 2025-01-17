@@ -32,13 +32,15 @@ namespace _5MI.BookManager.Test.UseCases
         [Fact]
         public async void No_Title_Set()
         {
-
             var fixture = new Fixture();
             var book = fixture.Build<Book>()
                               .With(b => b.Title, string.Empty)
                               .Create();
 
             var bookrepositoryMoq = new Mock<IBookRepository>();
+            bookrepositoryMoq
+                .Setup(repo => repo.AddBookAsync(It.IsAny<Book>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(book);
 
             var addBookUseCase = new AddBookUseCase(bookrepositoryMoq.Object);
 
