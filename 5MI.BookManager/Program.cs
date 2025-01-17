@@ -1,3 +1,4 @@
+using _5MI.BookManager.Applicatif.Core;
 using _5MI.BookManager.Applicatif.UseCases;
 using _5MI.BookManager.Domain.Repositories.Core;
 using _5MI.BookManager.Persistence;

@@ -1,6 +1,7 @@
 using _5MI.BookManager.Domain.Models;
 using _5MI.BookManager.Applicatif.Core;
 using System.Collections.Generic;
+using _5MI.BookManager.Domain.Repositories.Core;
 
 namespace _5MI.BookManager.Applicatif.UseCases
 {
@@ -13,7 +14,7 @@ namespace _5MI.BookManager.Applicatif.UseCases
             _bookRepository = bookRepository;
         }
 
-        public async Task<IEnumerable<Book>> ExecuteAsync(CancellationToken ct = default)
+        public async Task<IList<Book>> ExecuteAsync(CancellationToken ct = default)
         {
             return await _bookRepository.GetAllBooksAsync(ct);
         }
