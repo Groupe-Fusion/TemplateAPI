@@ -1,0 +1,9 @@
+using _5MI.BookManager.Domain.Models;
+
+namespace _5MI.BookManager.Applicatif.UseCases
+{
+    public interface IGetAllBooksUseCase
+    {
+        Task<Book> ExecuteAsync(int bookId, CancellationToken ct = default);
+    }
+}
