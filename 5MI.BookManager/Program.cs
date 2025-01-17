@@ -1,9 +1,30 @@
+using _5MI.BookManager.Applicatif.UseCases;
+using _5MI.BookManager.Domain.Repositories.Core;
+using _5MI.BookManager.Persistence;
+using _5MI.BookManager.Persistence.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddDbContext<BookManagerContext>(options =>
+{
+    var sqlConnectionString = builder.Configuration.GetConnectionString("Default");
+    if(sqlConnectionString is null)
+        throw new ArgumentNullException("No connection string found");
 
+    options.UseSqlServer(
+        sqlConnectionString,
+        b => b.MigrationsAssembly("5MI.BookManager.Persistence"));
+});
+// inject repositories
+builder.Services.AddScoped<IBookRepository, BookRepository>();
+
+// inject use cases
+builder.Services.AddTransient<IBorrowBookUseCase, BorrowBookUseCase>();
+builder.Services.AddTransient<IReturnBookUseCase, ReturnBookUseCase>();
+
+// Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -21,5 +42,10 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// auto migrate database
+using var scope = app.Services.CreateScope();
+var context = scope.ServiceProvider.GetService<BookManagerContext>()!;
+context.Database.Migrate();
 
 app.Run();

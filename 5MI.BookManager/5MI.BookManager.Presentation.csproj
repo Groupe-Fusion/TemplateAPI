@@ -9,10 +9,19 @@
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.12">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\5MI.BookManager.Applicatif\5MI.BookManager.Applicatif.csproj" />
+    <ProjectReference Include="..\5MI.BookManager.Persistence\5MI.BookManager.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
