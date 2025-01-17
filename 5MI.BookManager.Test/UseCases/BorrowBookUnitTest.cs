@@ -34,7 +34,7 @@ namespace _5MI.BookManager.Test.UseCases
         {
             var fixture = new Fixture();
             var book = fixture.Build<Book>()
-                              .With(b => b.IsBorrowed, false) 
+                              .With(b => b.IsBorrowed, true) 
                               .Create();
 
             var bookRepositoryMock = new Mock<IBookRepository>();
