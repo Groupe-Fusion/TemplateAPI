@@ -16,10 +16,10 @@ namespace _5MI.BookManager.Applicatif.UseCases
         public async Task<Book> ExecuteAsync(int bookId, CancellationToken ct = default)
         {
             var book = await _bookRepository.GetBookByIdAsync(bookId, ct);
-            if (book == null || !book.IsBorrowed)
+            if (book == null || book.IsBorrowed)
                 throw new InvalidOperationException("Le livre n'est pas disponible pour l'emprunt.");
 
-            book.IsBorrowed = false;
+            book.IsBorrowed = true;
 
             return await _bookRepository.UpdateBookAsync(book, ct); ;
         }

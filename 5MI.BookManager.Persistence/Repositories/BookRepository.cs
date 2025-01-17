@@ -28,7 +28,7 @@ namespace _5MI.BookManager.Persistence.Repositories
 
         public Task<List<Book>> GetAllBooksAsync(CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            return _context.Books.ToListAsync(ct);
         }
 
         public Task<Book?> GetBookByIdAsync(int id, CancellationToken ct = default)

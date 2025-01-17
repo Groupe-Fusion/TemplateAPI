@@ -23,6 +23,9 @@ builder.Services.AddScoped<IBookRepository, BookRepository>();
 // inject use cases
 builder.Services.AddTransient<IBorrowBookUseCase, BorrowBookUseCase>();
 builder.Services.AddTransient<IReturnBookUseCase, ReturnBookUseCase>();
+builder.Services.AddTransient<IGetAllBooksUseCase, GetAllBooksUseCase>();
+builder.Services.AddTransient<IGetBookByIdUseCase, GetBookByIdUseCase>();
+builder.Services.AddTransient<IAddBookUseCase, AddBookUseCase>();
 
 // Add services to the container.
 builder.Services.AddControllers();
