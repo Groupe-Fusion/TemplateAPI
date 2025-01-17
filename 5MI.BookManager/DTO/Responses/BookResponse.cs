@@ -1,4 +1,4 @@
-﻿namespace _5MI.BookManager.DTO
+﻿namespace _5MI.BookManager.DTO.Responses
 {
     public class BookResponse
     {
