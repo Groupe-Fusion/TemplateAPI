@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /5MI.BookManager
 
-COPY ..
+COPY . .
 
 RUN dodnet restore
 RUN dotnet publish -c Release -o /app --no-restore
