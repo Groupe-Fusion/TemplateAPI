@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _5MI.BookManager.Persistence;
 
@@ -10,9 +11,11 @@ using _5MI.BookManager.Persistence;
 namespace _5MI.BookManager.Persistence.Migrations
 {
     [DbContext(typeof(BookManagerContext))]
-    partial class BookManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20250228084455_v1")]
+    partial class v1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

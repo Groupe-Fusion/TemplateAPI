@@ -11,60 +11,18 @@ namespace _5MI.BookManager.Presentation.Controllers
     [Route("api/[controller]")]
     public class BorrowBookController : ControllerBase
     {
-        private readonly IBorrowBookUseCase _borrowBookUseCase;
-        private readonly IReturnBookUseCase _returnBookUseCase;
         private readonly IAddBookUseCase _addBookUseCase;
         private readonly IGetAllBooksUseCase _getAllBooksUseCase;
         private readonly IGetBookByIdUseCase _getBookByIdUseCase;
 
         public BorrowBookController(
-            IBorrowBookUseCase borrowBookUseCase,
-            IReturnBookUseCase returnBookUseCase,
             IAddBookUseCase addBookUseCase,
             IGetAllBooksUseCase getAllBooksUseCase,
             IGetBookByIdUseCase getBookByIdUseCase)
         {
-            _borrowBookUseCase = borrowBookUseCase;
-            _returnBookUseCase = returnBookUseCase;
             _addBookUseCase = addBookUseCase;
             _getAllBooksUseCase = getAllBooksUseCase;
             _getBookByIdUseCase = getBookByIdUseCase;
-        }
-
-        /// <summary>
-        /// Emprunter un livre par son ID.
-        /// </summary>
-        [HttpPut("borrow/{bookId}")]
-        public async Task<IActionResult> BorrowBook(int bookId, CancellationToken ct)
-        {
-            try
-            {
-                var book = await _borrowBookUseCase.ExecuteAsync(bookId, ct);
-                var bookResponse = BookMapper.ToBookResponse(book);
-                return Ok(bookResponse);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound($"{bookId}Not found");
-            }
-        }
-
-        /// <summary>
-        /// Retourner un livre par son ID.
-        /// </summary>
-        [HttpPut("return/{bookId}")]
-        public async Task<IActionResult> ReturnBook(int bookId, CancellationToken ct)
-        {
-            try
-            {
-                var book = await _returnBookUseCase.ExecuteAsync(bookId, ct);
-                var bookResponse = BookMapper.ToBookResponse(book);
-                return Ok(bookResponse);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound($"{bookId}Not found");
-            }
         }
 
         /// <summary>
