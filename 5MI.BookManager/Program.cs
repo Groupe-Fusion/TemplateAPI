@@ -4,8 +4,17 @@ using _5MI.BookManager.Domain.Repositories.Core;
 using _5MI.BookManager.Persistence;
 using _5MI.BookManager.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders();
+
+var logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateLogger();
+
+builder.Logging.AddSerilog(logger);
+
 
 builder.Services.AddDbContext<BookManagerContext>(options =>
 {

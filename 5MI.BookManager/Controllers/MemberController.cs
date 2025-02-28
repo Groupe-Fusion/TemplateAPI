@@ -11,6 +11,8 @@ namespace _5MI.BookManager.Presentation.Controllers
     [Route("api/members")]
     public class MemberController : ControllerBase
     {
+        private readonly ILogger<MemberController> _logger;
+
         private readonly IGetAllMembersUseCase _getAllMembersUseCase;
         private readonly IGetMemberByIdUseCase _getMemberByIdUseCase;
         private readonly IAddMemberUseCase _addMemberUseCase;
@@ -18,12 +20,15 @@ namespace _5MI.BookManager.Presentation.Controllers
         private readonly IDeleteMemberUseCase _deleteMemberUseCase;
 
         public MemberController(
+            ILogger<MemberController> logger,
             IGetAllMembersUseCase getAllMembersUseCase,
             IGetMemberByIdUseCase getMemberByIdUseCase,
             IAddMemberUseCase addMemberUseCase,
             IUpdateMemberUseCase updateMemberUseCase,
             IDeleteMemberUseCase deleteMemberUseCase)
         {
+            _logger = logger;
+
             _getAllMembersUseCase = getAllMembersUseCase;
             _getMemberByIdUseCase = getMemberByIdUseCase;
             _addMemberUseCase = addMemberUseCase;
@@ -41,6 +46,7 @@ namespace _5MI.BookManager.Presentation.Controllers
             {
                 var member = MemberMapper.ToEntity(memberRequest);
                 var book = await _addMemberUseCase.ExecuteAsync(member, ct);
+                _logger.LogInformation("New member \"{lastname} {firstname}\" created with id {id}",member.LastName, member.FirstName,  member.Id);
                 return CreatedAtAction(nameof(GetMemberById), new { memberId = member.Id }, MemberMapper.ToResponse(member));
             }
             catch (Exception ex)
@@ -100,6 +106,7 @@ namespace _5MI.BookManager.Presentation.Controllers
                 var raw = MemberMapper.ToEntity(memberRequest);
 
                 var member = await _updateMemberUseCase.ExecuteAsync(memberId, raw, ct);
+                _logger.LogInformation("Update member \"{lastname} {firstname}\" with id {id}", member.LastName, member.FirstName, member.Id);
                 return Ok(MemberMapper.ToResponse(member));
             }
             catch (ItemNotFoundException<Member> e)
@@ -121,6 +128,7 @@ namespace _5MI.BookManager.Presentation.Controllers
             try
             {
                 var member = await _deleteMemberUseCase.ExecuteAsync(memberId, ct);
+                _logger.LogInformation("Remove member \"{lastname} {firstname}\" with id {id}", member.LastName, member.FirstName, member.Id);
                 return Ok(MemberMapper.ToResponse(member));
             }
             catch (ItemNotFoundException<Member> e)
