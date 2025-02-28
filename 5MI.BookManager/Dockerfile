@@ -18,4 +18,4 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Définir le point d'entrée de l'application
-ENTRYPOINT ["dotnet", "DotNet.Docker.dll"]
+ENTRYPOINT ["dotnet", "5MI.BookManager.Presentation.dll"]
