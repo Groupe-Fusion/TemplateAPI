@@ -1,21 +1,19 @@
-# Étape 1 : Construire l'application
+# Use the official .NET SDK image to build the app
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+
+# Copy the entire solution (you can adjust the path if your solution is in a subfolder)
+COPY . ./src
+
+RUN dotnet build -o /app
+RUN dotnet publish -o /publish
+
+# Use the official .NET runtime image for running the app
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
+EXPOSE 80
 
-# Copier les fichiers du projet et restaurer les dépendances
-COPY *.csproj .
-RUN dotnet restore
+# Copy the build output and set it as the entry point
+COPY --from=build /publish .
 
-# Copier le reste des fichiers de l'application
-COPY . .
-RUN dotnet publish -c Release -o /app/publish
-
-# Étape 2 : Créer l'image d'exécution
-FROM mcr.microsoft.com/dotnet/runtime:9.0
-WORKDIR /app
-
-# Copier les fichiers publiés depuis l'étape de build
-COPY --from=build /app/publish .
-
-# Définir le point d'entrée de l'application
-ENTRYPOINT ["dotnet", "5MI.BookManager.Presentation.dll"]
+ENTRYPOINT ["dotnet", "5MI.BookManager.dll"]
