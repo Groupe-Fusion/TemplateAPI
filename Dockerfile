@@ -3,7 +3,7 @@ WORKDIR /5MI.BookManager
 
 COPY . .
 
-RUN dodnet restore
+RUN dotnet restore
 RUN dotnet publish -c Release -o /app --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
