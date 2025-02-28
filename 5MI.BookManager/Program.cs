@@ -62,6 +62,6 @@ app.MapControllers();
 // auto migrate database
 using var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetService<BookManagerContext>()!;
-context.Database.Migrate();
+//context.Database.Migrate();
 
 app.Run();
