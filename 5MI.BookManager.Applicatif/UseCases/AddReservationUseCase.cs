@@ -18,6 +18,9 @@ namespace _5MI.BookManager.Applicatif.UseCases
             if (newReservation.BookId == 0)
                 throw new ArgumentException("Entrer un id de livre valide");
 
+            if (newReservation.MemberId == 0)
+                throw new ArgumentException("Entrer un id de member valide");
+
             await _reservationRepository.AddReservationAsync(newReservation, ct);
 
             return newReservation;

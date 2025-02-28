@@ -11,11 +11,11 @@ namespace _5MI.BookManager.Applicatif.UseCases
         {
             _reservationRepository = reservationRepository;
         }
-        public async Task<Reservation> ExecuteAsync(int id, CancellationToken ct = default)
+        public async Task<Reservation> ExecuteAsync(int bookId, int memberId, CancellationToken ct = default)
         {
-            var reservation = await _reservationRepository.GetReservationByIdAsync(id, ct);
+            var reservation = await _reservationRepository.GetReservationByIdAsync(bookId, memberId, ct);
             if (reservation == null)
-                throw new InvalidOperationException("Réservation introuvable avec cet ID.");
+                throw new InvalidOperationException("Réservation introuvable avec ces ID.");
             return reservation;
         }
     }

@@ -3,9 +3,9 @@
     public class Reservation
     {
         public int BookId { get; set; }
-        public required virtual Book Book { get; set; }
+        public virtual Book Book { get; set; }
 
         public int MemberId { get; set; }
-        public required virtual Member Member { get; set; }
+        public virtual Member Member { get; set; }
     }
 }

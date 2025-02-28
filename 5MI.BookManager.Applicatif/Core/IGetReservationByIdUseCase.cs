@@ -4,6 +4,6 @@ namespace _5MI.BookManager.Applicatif.Core
 {
     public interface IGetReservationByIdUseCase
     {
-        Task<Reservation> ExecuteAsync(int id, CancellationToken ct = default);
+        Task<Reservation> ExecuteAsync(int bookId, int memberId, CancellationToken ct = default);
     }
 }

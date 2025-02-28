@@ -26,6 +26,10 @@ builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 builder.Services.AddTransient<IGetAllBooksUseCase, GetAllBooksUseCase>();
 builder.Services.AddTransient<IGetBookByIdUseCase, GetBookByIdUseCase>();
 builder.Services.AddTransient<IAddBookUseCase, AddBookUseCase>();
+builder.Services.AddTransient<IGetAllReservationsUseCase, GetAllReservationsUseCase>();
+builder.Services.AddTransient<IGetReservationByIdUseCase, GetReservationByIdUseCase>();
+builder.Services.AddTransient<IAddReservationUseCase, AddReservationUseCase>();
+builder.Services.AddTransient<IDeleteReservationUseCase, DeleteReservationUseCase>();
 
 // Add services to the container.
 builder.Services.AddControllers();

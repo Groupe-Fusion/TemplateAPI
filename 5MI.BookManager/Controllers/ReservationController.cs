@@ -9,31 +9,38 @@ namespace _5MI.ReservationManager.Controllers
         private readonly IAddReservationUseCase _addReservationUseCase;
         private readonly IGetAllReservationsUseCase _getAllReservationsUseCase;
         private readonly IGetReservationByIdUseCase _getReservationByIdUseCase;
+        private readonly IDeleteReservationUseCase _deleteReservationUseCase;
 
         public ReservationController(
             IAddReservationUseCase addReservationUseCase,
             IGetAllReservationsUseCase getAllReservationsUseCase,
-            IGetReservationByIdUseCase getReservationByIdUseCase)
+            IGetReservationByIdUseCase getReservationByIdUseCase,
+            IDeleteReservationUseCase deleteReservationUseCase)
         {
             _addReservationUseCase = addReservationUseCase;
             _getAllReservationsUseCase = getAllReservationsUseCase;
             _getReservationByIdUseCase = getReservationByIdUseCase;
+            _deleteReservationUseCase = deleteReservationUseCase;
         }
 
         /// <summary>
         /// Ajouter une nouvelle réservation.
         /// </summary>
         [HttpPost("add")]
-        public async Task<IActionResult> AddReservation([FromBody] Reservation reservationn, CancellationToken ct)
+        public async Task<IActionResult> AddReservation([FromBody] Reservation reservation, CancellationToken ct)
         {
             try
             {
-                var reservation = await _addReservationUseCase.ExecuteAsync(reservationn, ct);
-                return CreatedAtAction(nameof(GetReservationById), new { reservationId = new Guid() }, reservation);
+                var newReservation = await _addReservationUseCase.ExecuteAsync(reservation, ct);
+                return Ok(newReservation);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"errror {ex.Message}");
+                return StatusCode(500, $"Error: {ex.Message}");
             }
         }
 
@@ -58,17 +65,34 @@ namespace _5MI.ReservationManager.Controllers
         /// <summary>
         /// Récupérer une réservation par son id.
         /// </summary>
-        [HttpGet("{reservationId}")]
-        public async Task<IActionResult> GetReservationById(int reservationId, CancellationToken ct)
+        [HttpGet("{bookId}/{memberId}")]
+        public async Task<IActionResult> GetReservationById(int bookId, int memberId, CancellationToken ct)
         {
             try
             {
-                var reservation = await _getReservationByIdUseCase.ExecuteAsync(reservationId, ct);
+                var reservation = await _getReservationByIdUseCase.ExecuteAsync(bookId, memberId, ct);
                 return Ok(reservation);
             }
             catch (KeyNotFoundException)
             {
-                return NotFound($"{reservationId}Not found");
+                return NotFound($"reservation Not found");
+            }
+        }
+
+        [HttpDelete("{bookId}/{memberId}")]
+        public async Task<IActionResult> DeleteReservation(int bookId, int memberId, CancellationToken ct)
+        {
+            try
+            {
+                var reservation = await _deleteReservationUseCase.ExecuteAsync(bookId, memberId, ct);
+                if (reservation is null)
+                    return NotFound("Reservation not found");
+
+                return Ok(reservation);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
             }
         }
     }
