@@ -19,10 +19,10 @@ builder.Services.AddDbContext<BookManagerContext>(options =>
 });
 // inject repositories
 builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 
 // inject use cases
-builder.Services.AddTransient<IBorrowBookUseCase, BorrowBookUseCase>();
-builder.Services.AddTransient<IReturnBookUseCase, ReturnBookUseCase>();
 builder.Services.AddTransient<IGetAllBooksUseCase, GetAllBooksUseCase>();
 builder.Services.AddTransient<IGetBookByIdUseCase, GetBookByIdUseCase>();
 builder.Services.AddTransient<IAddBookUseCase, AddBookUseCase>();
