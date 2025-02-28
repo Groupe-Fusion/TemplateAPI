@@ -9,7 +9,7 @@ using _5MI.BookManager.Applicatif.UseCases;
 namespace _5MI.BookManager.Presentation.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/books")]
     public class BorrowBookController : ControllerBase
     {
         private readonly IAddBookUseCase _addBookUseCase;
@@ -35,7 +35,7 @@ namespace _5MI.BookManager.Presentation.Controllers
         /// <summary>
         /// Ajouter un nouveau livre.
         /// </summary>
-        [HttpPost("add")]
+        [HttpPost("")]
         public async Task<IActionResult> AddBook([FromBody] BookRequest bookRequest, CancellationToken ct)
         {
             try
@@ -102,7 +102,7 @@ namespace _5MI.BookManager.Presentation.Controllers
         /// <summary>
         /// Récupérer tous les livres.
         /// </summary>
-        [HttpGet("all")]
+        [HttpGet("")]
         public async Task<IActionResult> GetAllBooks(CancellationToken ct)
         {
             try
