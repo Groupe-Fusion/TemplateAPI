@@ -6,10 +6,10 @@ WORKDIR /5MI.BookManager
 COPY . .
 
 RUN dotnet restore
-RUN dotnet publish -c release -o /app2 --no-restore
+RUN dotnet publish -c release -o /app --no-restore
 
 # run the app
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
-WORKDIR /app2
-COPY --from=build /app2 ./
+WORKDIR /app
+COPY --from=build /app ./
 ENTRYPOINT ["dotnet", "5MI.BookManager.Presentation.dll"]

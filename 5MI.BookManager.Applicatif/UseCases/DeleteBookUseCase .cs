@@ -13,7 +13,7 @@ namespace _5MI.BookManager.Applicatif.UseCases
             _bookRepository = bookRepository;
         }
 
-        public async Task ExecuteAsync(Guid bookId, CancellationToken ct = default)
+        public async Task ExecuteAsync(int bookId, CancellationToken ct = default)
         {
             var book = await _bookRepository.GetBookByIdAsync(bookId, ct);
             if (book == null)
