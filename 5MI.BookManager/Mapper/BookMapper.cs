@@ -10,8 +10,7 @@ namespace _5MI.BookManager.Mapper
         {
             return new Book()
             {
-                Title = req.Title,
-                IsBorrowed = false,
+                Title = req.Title
             };
         }
 
@@ -20,8 +19,7 @@ namespace _5MI.BookManager.Mapper
             return new BookResponse
             {
                 Id = book.Id,
-                Title = book.Title,
-                IsBorrowed = book.IsBorrowed
+                Title = book.Title
             };
         }
     }
