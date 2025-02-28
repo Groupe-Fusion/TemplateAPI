@@ -21,11 +21,11 @@ namespace _5MI.BookManager.Applicatif.UseCases
 
         public async Task<Reservation> ExecuteAsync(Reservation newReservation, CancellationToken ct = default)
         {
-            var response = await _httpClientBook.GetAsync($"api/book/{newReservation.BookId}", ct);
+            var response = await _httpClientBook.GetAsync($"api/books/{newReservation.BookId}", ct);
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new ArgumentException("Book not found");
 
-            var member = await _httpClientMember.GetAsync($"api/member/{newReservation.MemberId}", ct);
+            var member = await _httpClientMember.GetAsync($"api/members/{newReservation.MemberId}", ct);
             if (member.StatusCode != HttpStatusCode.OK)
                 throw new ArgumentException("Member not found");
 
