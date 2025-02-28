@@ -23,9 +23,6 @@ builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 
 // inject use cases
-builder.Services.AddTransient<IGetAllBooksUseCase, GetAllBooksUseCase>();
-builder.Services.AddTransient<IGetBookByIdUseCase, GetBookByIdUseCase>();
-builder.Services.AddTransient<IAddBookUseCase, AddBookUseCase>();
 builder.Services.AddTransient<IGetAllReservationsUseCase, GetAllReservationsUseCase>();
 builder.Services.AddTransient<IGetReservationByIdUseCase, GetReservationByIdUseCase>();
 builder.Services.AddTransient<IAddReservationUseCase, AddReservationUseCase>();
