@@ -13,9 +13,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "5MI.BookManager.Persistence
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "5MI.BookManager.Test", "5MI.BookManager.Test\5MI.BookManager.Test.csproj", "{358BC4B1-A953-43D2-97D3-46D20F97C94E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Éléments de solution", "Éléments de solution", "{4B3508D8-4A74-471D-9AB6-23CD37137105}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Éléments de solution", "Éléments de solution", "{35D22F01-7585-4BE9-AB3A-29AC0977CE87}"
 	ProjectSection(SolutionItems) = preProject
-		5MI.BookManager\Dockerfile = 5MI.BookManager\Dockerfile
+		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
 Global
