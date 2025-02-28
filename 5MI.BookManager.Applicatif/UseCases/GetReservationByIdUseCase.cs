@@ -1,0 +1,22 @@
+﻿using _5MI.BookManager.Applicatif.Core;
+using _5MI.BookManager.Domain.Models;
+using _5MI.BookManager.Domain.Repositories.Core;
+
+namespace _5MI.BookManager.Applicatif.UseCases
+{
+    public class GetReservationByIdUseCase : IGetReservationByIdUseCase
+    {
+        private readonly IReservationRepository _reservationRepository;
+        public GetReservationByIdUseCase(IReservationRepository reservationRepository)
+        {
+            _reservationRepository = reservationRepository;
+        }
+        public async Task<Reservation> ExecuteAsync(int id, CancellationToken ct = default)
+        {
+            var reservation = await _reservationRepository.GetReservationByIdAsync(id, ct);
+            if (reservation == null)
+                throw new InvalidOperationException("Réservation introuvable avec cet ID.");
+            return reservation;
+        }
+    }
+}

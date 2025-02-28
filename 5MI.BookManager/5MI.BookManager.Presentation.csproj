@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\5MI.BookManager.Applicatif\5MI.BookManager.Applicatif.csproj" />
     <ProjectReference Include="..\5MI.BookManager.Persistence\5MI.BookManager.Persistence.csproj" />
   </ItemGroup>
