@@ -17,10 +17,5 @@ namespace _5MI.BookManager.Applicatif.UseCases
         {
             return await _reservationRepository.GetAllReservationsAsync(ct);
         }
-
-        Task<IList<Reservation>> IGetAllReservationsUseCase.ExecuteAsync(CancellationToken ct)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

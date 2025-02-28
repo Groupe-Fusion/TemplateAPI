@@ -1,9 +1,13 @@
 ﻿using _5MI.BookManager.Applicatif.Core;
 using _5MI.BookManager.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace _5MI.ReservationManager.Controllers
 {
+    [ApiController]
+    [Route("api/reservations")]
     public class ReservationController : ControllerBase
     {
         private readonly IAddReservationUseCase _addReservationUseCase;
@@ -26,11 +30,17 @@ namespace _5MI.ReservationManager.Controllers
         /// <summary>
         /// Ajouter une nouvelle réservation.
         /// </summary>
-        [HttpPost("add")]
+        [HttpPost()]
         public async Task<IActionResult> AddReservation([FromBody] Reservation reservation, CancellationToken ct)
         {
             try
             {
+                // Vérifie que le modèle n'est pas null
+                if (reservation == null)
+                {
+                    return BadRequest("Reservation is null.");
+                }
+
                 var newReservation = await _addReservationUseCase.ExecuteAsync(reservation, ct);
                 return Ok(newReservation);
             }
@@ -47,7 +57,7 @@ namespace _5MI.ReservationManager.Controllers
         /// <summary>
         /// Récupérer toutes les réservations.
         /// </summary>
-        [HttpGet("all")]
+        [HttpGet()]
         public async Task<IActionResult> GetAllReservations(CancellationToken ct)
         {
             try

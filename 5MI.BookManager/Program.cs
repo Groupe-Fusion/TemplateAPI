@@ -28,6 +28,17 @@ builder.Services.AddTransient<IGetReservationByIdUseCase, GetReservationByIdUseC
 builder.Services.AddTransient<IAddReservationUseCase, AddReservationUseCase>();
 builder.Services.AddTransient<IDeleteReservationUseCase, DeleteReservationUseCase>();
 
+// Add HttpClient service
+builder.Services.AddHttpClient("BookService", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ExternalServices:BookService:Url"]);
+});
+
+builder.Services.AddHttpClient("MemberService", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ExternalServices:MemberService:Url"]);
+});
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
