@@ -1,41 +1,47 @@
 using Microsoft.AspNetCore.Mvc;
 using _5MI.BookManager.Applicatif.Core;
 using _5MI.BookManager.Domain.Models;
-using _5MI.BookManager.DTO;
 using _5MI.BookManager.Mapper;
 using _5MI.BookManager.DTO.Requests;
+using _5MI.BookManager.Applicatif.Exceptions;
 
 namespace _5MI.BookManager.Presentation.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class BorrowBookController : ControllerBase
+    [Route("api/members")]
+    public class MemberController : ControllerBase
     {
-        private readonly IAddBookUseCase _addBookUseCase;
-        private readonly IGetAllBooksUseCase _getAllBooksUseCase;
-        private readonly IGetBookByIdUseCase _getBookByIdUseCase;
+        private readonly IGetAllMembersUseCase _getAllMembersUseCase;
+        private readonly IGetMemberByIdUseCase _getMemberByIdUseCase;
+        private readonly IAddMemberUseCase _addMemberUseCase;
+        private readonly IUpdateMemberUseCase _updateMemberUseCase;
+        private readonly IDeleteMemberUseCase _deleteMemberUseCase;
 
-        public BorrowBookController(
-            IAddBookUseCase addBookUseCase,
-            IGetAllBooksUseCase getAllBooksUseCase,
-            IGetBookByIdUseCase getBookByIdUseCase)
+        public MemberController(
+            IGetAllMembersUseCase getAllMembersUseCase,
+            IGetMemberByIdUseCase getMemberByIdUseCase,
+            IAddMemberUseCase addMemberUseCase,
+            IUpdateMemberUseCase updateMemberUseCase,
+            IDeleteMemberUseCase deleteMemberUseCase)
         {
-            _addBookUseCase = addBookUseCase;
-            _getAllBooksUseCase = getAllBooksUseCase;
-            _getBookByIdUseCase = getBookByIdUseCase;
+            _getAllMembersUseCase = getAllMembersUseCase;
+            _getMemberByIdUseCase = getMemberByIdUseCase;
+            _addMemberUseCase = addMemberUseCase;
+            _updateMemberUseCase = updateMemberUseCase;
+            _deleteMemberUseCase = deleteMemberUseCase;
         }
 
         /// <summary>
-        /// Ajouter un nouveau livre.
+        /// Ajouter un nouveau membre.
         /// </summary>
-        [HttpPost("add")]
-        public async Task<IActionResult> AddBook([FromBody] BookRequest bookRequest, CancellationToken ct)
+        [HttpPost("")]
+        public async Task<IActionResult> AddMember([FromBody] MemberRequest memberRequest, CancellationToken ct = default)
         {
             try
             {
-                var newBook = BookMapper.ToBookEntity(bookRequest);
-                var book = await _addBookUseCase.ExecuteAsync(newBook, ct);
-                return CreatedAtAction(nameof(GetBookById), new { bookId = book.Id }, book);
+                var member = MemberMapper.ToEntity(memberRequest);
+                var book = await _addMemberUseCase.ExecuteAsync(member, ct);
+                return CreatedAtAction(nameof(GetMemberById), new { memberId = member.Id }, MemberMapper.ToResponse(member));
             }
             catch (Exception ex)
             {
@@ -44,16 +50,16 @@ namespace _5MI.BookManager.Presentation.Controllers
         }
 
         /// <summary>
-        /// Récupérer tous les livres.
+        /// Récupérer tous les membres.
         /// </summary>
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAllBooks(CancellationToken ct)
+        [HttpGet("")]
+        public async Task<IActionResult> GetAllMembers(CancellationToken ct = default)
         {
             try
             {
-                var books = await _getAllBooksUseCase.ExecuteAsync(ct);
-                var bookResponses = books.Select(BookMapper.ToBookResponse).ToList();
-                return Ok(bookResponses);
+                var members = await _getAllMembersUseCase.ExecuteAsync(ct);
+                var membersResponses = members.Select(MemberMapper.ToResponse).ToList();
+                return Ok(membersResponses);
             }
             catch (Exception ex)
             {
@@ -62,20 +68,68 @@ namespace _5MI.BookManager.Presentation.Controllers
         }
 
         /// <summary>
-        /// Récupérer un livre par son ID.
+        /// Récupérer un membre par son ID.
         /// </summary>
-        [HttpGet("{bookId}")]
-        public async Task<IActionResult> GetBookById(int bookId, CancellationToken ct)
+        [HttpGet("{memberId}")]
+        public async Task<IActionResult> GetMemberById(int memberId, CancellationToken ct = default)
         {
             try
             {
-                var book = await _getBookByIdUseCase.ExecuteAsync(bookId, ct);
-                var bookResponse = BookMapper.ToBookResponse(book);
-                return Ok(bookResponse);
+                var member = await _getMemberByIdUseCase.ExecuteAsync(memberId, ct);
+                var memberResponse = MemberMapper.ToResponse(member);
+                return Ok(memberResponse);
             }
-            catch (KeyNotFoundException)
+            catch (ItemNotFoundException<Member> e)
             {
-                return NotFound($"{bookId}Not found");
+                return NotFound(e.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"error {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Modifie un membre par son ID.
+        /// </summary>
+        [HttpPut("{memberId}")]
+        public async Task<IActionResult> UpdateMemberById(int memberId, [FromBody] MemberRequest memberRequest, CancellationToken ct = default)
+        {
+            try
+            {
+                var raw = MemberMapper.ToEntity(memberRequest);
+
+                var member = await _updateMemberUseCase.ExecuteAsync(memberId, raw, ct);
+                return Ok(MemberMapper.ToResponse(member));
+            }
+            catch (ItemNotFoundException<Member> e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"error {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Supprime un membre par son ID.
+        /// </summary>
+        [HttpDelete("{memberId}")]
+        public async Task<IActionResult> DeleteMemberById(int memberId, CancellationToken ct = default)
+        {
+            try
+            {
+                var member = await _deleteMemberUseCase.ExecuteAsync(memberId, ct);
+                return Ok(MemberMapper.ToResponse(member));
+            }
+            catch (ItemNotFoundException<Member> e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"error {ex.Message}");
             }
         }
     }

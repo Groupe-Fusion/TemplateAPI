@@ -8,6 +8,6 @@ namespace _5MI.BookManager.Domain.Repositories.Core
         Task<Member?> GetMemberByIdAsync(int id, CancellationToken ct = default);
         Task<Member> AddMemberAsync(Member member, CancellationToken ct = default);
         Task<Member> UpdateMemberAsync(Member member, CancellationToken ct = default);
-        Task<Member> DeleteMemberAsync(int id, CancellationToken ct = default);
+        Task<bool> DeleteMemberAsync(Member member, CancellationToken ct = default);
     }
 }
