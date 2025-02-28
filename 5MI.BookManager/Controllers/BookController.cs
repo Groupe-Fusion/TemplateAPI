@@ -21,11 +21,15 @@ namespace _5MI.BookManager.Presentation.Controllers
         public BorrowBookController(
             IAddBookUseCase addBookUseCase,
             IGetAllBooksUseCase getAllBooksUseCase,
-            IGetBookByIdUseCase getBookByIdUseCase)
+            IGetBookByIdUseCase getBookByIdUseCase,
+            IEditBookUseCase editBookUseCase,
+            IDeleteBookUseCase deleteBookUseCase)
         {
             _addBookUseCase = addBookUseCase;
             _getAllBooksUseCase = getAllBooksUseCase;
             _getBookByIdUseCase = getBookByIdUseCase;
+            _editBookUseCase = editBookUseCase;
+            _deleteBookUseCase = deleteBookUseCase;
         }
 
         /// <summary>
