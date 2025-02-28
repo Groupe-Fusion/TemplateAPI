@@ -1,8 +1,7 @@
 ﻿using _5MI.BookManager.Applicatif.Core;
-using _5MI.BookManager.Domain.Models;
+using _5MI.BookManager.DTO.Requests;
+using _5MI.BookManager.Mapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Text.Json;
 
 namespace _5MI.ReservationManager.Controllers
 {
@@ -31,18 +30,12 @@ namespace _5MI.ReservationManager.Controllers
         /// Ajouter une nouvelle réservation.
         /// </summary>
         [HttpPost()]
-        public async Task<IActionResult> AddReservation([FromBody] Reservation reservation, CancellationToken ct)
+        public async Task<IActionResult> AddReservation([FromBody] ReservationRequest reservationRequest, CancellationToken ct)
         {
             try
             {
-                // Vérifie que le modèle n'est pas null
-                if (reservation == null)
-                {
-                    return BadRequest("Reservation is null.");
-                }
-
-                var newReservation = await _addReservationUseCase.ExecuteAsync(reservation, ct);
-                return Ok(newReservation);
+                var reservation = await _addReservationUseCase.ExecuteAsync(ReservationMapper.ToEntity(reservationRequest), ct);
+                return Ok(ReservationMapper.ToResponse(reservation));
             }
             catch (ArgumentException ex)
             {
@@ -63,8 +56,7 @@ namespace _5MI.ReservationManager.Controllers
             try
             {
                 var reservations = await _getAllReservationsUseCase.ExecuteAsync(ct);
-                var reservationResponses = reservations.ToList();
-                return Ok(reservationResponses);
+                return Ok(reservations.Select(ReservationMapper.ToResponse));
             }
             catch (Exception ex)
             {
@@ -81,7 +73,7 @@ namespace _5MI.ReservationManager.Controllers
             try
             {
                 var reservation = await _getReservationByIdUseCase.ExecuteAsync(bookId, memberId, ct);
-                return Ok(reservation);
+                return Ok(ReservationMapper.ToResponse(reservation));
             }
             catch (KeyNotFoundException)
             {
@@ -89,6 +81,9 @@ namespace _5MI.ReservationManager.Controllers
             }
         }
 
+        /// <summary>
+        /// Supprime une réservation par son id.
+        /// </summary>
         [HttpDelete("{bookId}/{memberId}")]
         public async Task<IActionResult> DeleteReservation(int bookId, int memberId, CancellationToken ct)
         {
@@ -98,7 +93,7 @@ namespace _5MI.ReservationManager.Controllers
                 if (reservation is null)
                     return NotFound("Reservation not found");
 
-                return Ok(reservation);
+                return Ok(ReservationMapper.ToResponse(reservation));
             }
             catch (Exception ex)
             {

@@ -20,9 +20,4 @@
     <ProjectReference Include="..\5MI.BookManager.Persistence\5MI.BookManager.Persistence.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTO\Requests\" />
-    <Folder Include="Mapper\" />
-  </ItemGroup>
-
 </Project>

@@ -38,13 +38,18 @@ namespace _5MI.BookManager.Persistence.Repositories
 
         public Task<List<Reservation>> GetAllReservationsAsync(CancellationToken ct = default)
         {
-            return _context.Reservations.ToListAsync(ct);
+            return _context.Reservations
+                .Include(r => r.Member)
+                .Include(r => r.Book)
+                .ToListAsync(ct);
         }
 
         //TODO modifs
         public Task<Reservation?> GetReservationByIdAsync(int BookId, int MemberId, CancellationToken ct = default)
         {
             return _context.Reservations
+                .Include(r => r.Member)
+                .Include(r => r.Book)
                 .FirstOrDefaultAsync(x => x.BookId == BookId && x.MemberId == MemberId, ct);
         }
 
