@@ -26,7 +26,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
-            cd /home/${{ secrets.SSH_USER }}/bookmanager
+            cd /micro-service/testDeploy
             docker compose down
             docker pull ghcr.io/${{ github.repository }}:latest
             docker compose up -d
