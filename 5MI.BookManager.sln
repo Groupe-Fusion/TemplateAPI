@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "5MI.BookManager.Presentation", "5MI.BookManager\5MI.BookManager.Presentation.csproj", "{14B8760B-7863-4010-97A4-9FE96264871E}"
 EndProject
@@ -12,6 +12,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "5MI.BookManager.Persistence", "5MI.BookManager.Persistence\5MI.BookManager.Persistence.csproj", "{69C30D89-8C2A-4109-BEEA-1D7625722407}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "5MI.BookManager.Test", "5MI.BookManager.Test\5MI.BookManager.Test.csproj", "{358BC4B1-A953-43D2-97D3-46D20F97C94E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Éléments de solution", "Éléments de solution", "{E8FA06F6-DFFE-43F6-B6D7-F9E9A5E5FE60}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
