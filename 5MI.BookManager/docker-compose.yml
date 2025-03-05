@@ -1,0 +1,229 @@
+services:
+    #BDD
+  user_db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: user_db
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=7.b63QwR2JBZ
+    ports:
+      - "1433:1433"
+    networks:
+      - sql_network
+    volumes:
+      - user_sql_data:/var/opt/mssql
+
+  reservation_db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: reservation_db
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=7.b63QwR2JBY
+    ports:
+      - "1434:1433"
+    networks:
+      - sql_network
+    volumes:
+      - volumes_sql_data:/var/opt/mssql
+
+  payment_db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: payment_db
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=7.b63QwR2JBX
+    ports:
+      - "1435:1433"
+    networks:
+      - sql_network
+    volumes:
+      - payment_sql_data:/var/opt/mssql
+
+  location_db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: location_db
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=7.b63QwR2JBB
+    ports:
+      - "1436:1433"
+    networks:
+      - sql_network
+    volumes:
+      - location_sql_data:/var/opt/mssql
+
+  review_db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: review_db
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=7.b63QwR2JBW
+    ports:
+      - "1437:1433"
+    networks:
+      - sql_network
+    volumes:
+      - review_sql_data:/var/opt/mssql
+
+  notification_db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: notification_db
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=7.b63QwR2JBQ
+    ports:
+      - "1438:1433"
+    networks:
+      - sql_network
+    volumes:
+      - notification_sql_data:/var/opt/mssql
+
+
+      #API
+  user_service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: user_service_container
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Default=Server=user_db,1433;Database=UserManager;User Id=sa;Password=7.b63QwR2JBZ;Encrypt=False;
+    ports:
+      - "8081:8080"
+    depends_on:
+      - user_db
+    networks:
+      - sql_network
+    
+  reservation_service:
+    build:
+      context: ./reservation-service
+      dockerfile: Dockerfile
+    container_name: reservation_service_container
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ExternalServices__UserService__Url=http://localhost:8081/
+      - ConnectionStrings__Default=Server=book_db,1434;Database=ReservationManager;User Id=sa;Password=7.b63QwR2JBZ;Encrypt=False;
+    ports:
+      - "8082:8080"
+    depends_on:
+      - book_db
+      - user_service
+    networks:
+      - sql_network
+
+  payment_service:
+    build:
+      context: ./payment-service
+      dockerfile: Dockerfile
+    container_name: payment_service_container
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Default=Server=payment_db,1435;Database=PaymentManager;User Id=sa;Password=7.b63QwR2JBZ;Encrypt=False;
+    ports:
+      - "8083:8080"
+    depends_on:
+      - payment_db
+    networks:
+      - sql_network
+
+  location_service:
+    build:
+      context: ./location-service
+      dockerfile: Dockerfile
+    container_name: location_service_container
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Default=Server=location_db,1436;Database=LocationManager;User Id=sa;Password=7.b63QwR2JBZ;Encrypt=False;
+    ports:
+      - "8084:8080"
+    depends_on:
+      - location_db
+    networks:
+      - sql_network
+
+  review_service:
+    build:
+      context: ./review-service
+      dockerfile: Dockerfile
+    container_name: review_service_container
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Default=Server=review_db,1437;Database=ReviewManager;User Id=sa;Password=7.b63QwR2JBZ;Encrypt=False;
+    ports:
+      - "8085:8080"
+    depends_on:
+      - user_db
+    networks:
+      - sql_network
+
+  notification_service:
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    container_name: notification_service_container
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AzureWebJobsStorage=UseDevelopmentStorage=true
+      - ConnectionStrings__Default=Server=notification_db,1438;Database=NotificationManager;User Id=sa;Password=7.b63QwR2JBZ;Encrypt=False;
+    ports:
+      - "8086:8080"
+    depends_on:
+      - user_db
+    networks:
+      - sql_network
+
+      # file de message
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: azurite
+    restart: always
+    ports:
+      - "10000:10000" # Blob
+      - "10001:10001" # Queue
+      - "10002:10002" # Table
+    networks:
+      - sql_network
+    volumes:
+      - azurite_data:/data
+
+      #API gateway avec YARP?
+  api_gateway:
+    build:
+        context: ./api-gateway
+        dockerfile: Dockerfile
+    container_name: api_gateway_container
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+        - "8080:8080"
+    networks:
+        - sql_network
+    depends_on:
+        - user_service
+        - reservation_service
+        - payment_service
+        - location_service
+        - review_service
+        - notification_service
+        - azurite
+
+networks:
+  sql_network:
+    driver: bridge
+
+volumes:
+  user_sql_data:
+  reservation_sql_data:
+  payment_sql_data:
+  location_sql_data:
+  review_sql_data:
+  notification_sql_data:
+  azurite_data:
+    
