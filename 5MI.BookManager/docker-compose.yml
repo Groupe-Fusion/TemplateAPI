@@ -100,6 +100,10 @@ services:
       - user_db
     networks:
       - sql_network
+    deploy:
+      replicas : 3
+      restart_policy:
+        condition: on-failure
     
   reservation_service:
     build:
@@ -172,6 +176,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - AzureWebJobsStorage=UseDevelopmentStorage=true
       - ConnectionStrings__Default=Server=notification_db,1438;Database=NotificationManager;User Id=sa;Password=7.b63QwR2JBZ;Encrypt=False;
+      - RABBITMQ__HOST=rabbitmq
     ports:
       - "8086:8080"
     depends_on:
@@ -213,6 +218,35 @@ services:
         - review_service
         - notification_service
         - azurite
+
+        #Load balancer nécessite docker swarm pour les balises réplicas
+  traefik:
+    image: "traefik:v2.10"
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - sql_network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - app_network
 
 networks:
   sql_network:
