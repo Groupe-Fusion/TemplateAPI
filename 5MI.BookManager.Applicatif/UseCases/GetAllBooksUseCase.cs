@@ -1,6 +1,5 @@
 using _5MI.BookManager.Domain.Models;
 using _5MI.BookManager.Applicatif.Core;
-using System.Collections.Generic;
 using _5MI.BookManager.Domain.Repositories.Core;
 
 namespace _5MI.BookManager.Applicatif.UseCases

@@ -11,7 +11,7 @@ using _5MI.BookManager.Persistence;
 namespace _5MI.BookManager.Persistence.Migrations
 {
     [DbContext(typeof(BookManagerContext))]
-    [Migration("20250228084455_v1")]
+    [Migration("20250402134649_v1")]
     partial class v1
     {
         /// <inheritdoc />
